@@ -233,65 +233,73 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'Unimac',
-              style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 0.5),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Unimac',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ],
+          ),
+          centerTitle: true,
+          elevation: 0,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.history),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EventListScreen(),
+                  ),
+                );
+              },
+              tooltip: 'View History',
+            ),
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              onPressed: _initializeServices,
+              tooltip: 'Refresh',
             ),
           ],
+          bottom: TabBar(
+            controller: _tabController,
+            labelColor: Theme.of(context).colorScheme.onPrimary,
+            unselectedLabelColor: Theme.of(
+              context,
+            ).colorScheme.onPrimary.withOpacity(0.7),
+            indicatorColor: Theme.of(context).colorScheme.onPrimary,
+            indicatorWeight: 3,
+            labelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+            tabs: const [
+              Tab(text: 'Dashboard'),
+              Tab(text: 'Activity'),
+              Tab(text: 'Settings'),
+            ],
+          ),
         ),
-        centerTitle: true,
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.history),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const EventListScreen(),
-                ),
-              );
-            },
-            tooltip: 'View History',
-          ),
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _initializeServices,
-            tooltip: 'Refresh',
-          ),
-        ],
-        bottom: TabBar(
+        body: TabBarView(
           controller: _tabController,
-          labelColor: Theme.of(context).colorScheme.onPrimary,
-          unselectedLabelColor: Theme.of(
-            context,
-          ).colorScheme.onPrimary.withOpacity(0.7),
-          indicatorColor: Theme.of(context).colorScheme.onPrimary,
-          indicatorWeight: 3,
-          labelStyle: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-          tabs: const [
-            Tab(text: 'Dashboard'),
-            Tab(text: 'Activity'),
-            Tab(text: 'Settings'),
+          children: [
+            // Dashboard Tab
+            _buildDashboardTab(),
+
+            // Activity Tab
+            _buildActivityTab(),
+            // Settings Tab
+            _buildSettingsTab(),
           ],
         ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          // Dashboard Tab
-          _buildDashboardTab(),
-
-          // Activity Tab
-          _buildActivityTab(),
-          // Settings Tab
-          _buildSettingsTab(),
-        ],
       ),
     );
   }

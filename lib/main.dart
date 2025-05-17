@@ -12,13 +12,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'GeoAttendance',
+      title: 'Unimac',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme(),
-      darkTheme: AppTheme.darkTheme(),
+      // darkTheme: AppTheme.darkTheme(),
       themeMode: ThemeMode.system,
       home: const HomeScreen(),
     );
   }
 }
- 

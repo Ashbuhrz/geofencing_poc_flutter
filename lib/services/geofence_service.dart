@@ -100,6 +100,8 @@ class GeofenceService {
 @pragma('vm:entry-point')
 Future<void> geofenceTriggered(GeofenceCallbackParams params) async {
   try {
+    debugPrint('Geofence event triggered: ${params.event}');
+    
     // Initialize services
     final storageService = StorageService();
     final attendanceService = AttendanceService();
@@ -111,33 +113,47 @@ Future<void> geofenceTriggered(GeofenceCallbackParams params) async {
     final currentState = attendanceService.currentState;
     final now = DateTime.now();
     
+    debugPrint('Current attendance status: ${currentState.status}');
+    
     // Handle different geofence events
     switch (params.event) {
       case GeofenceEvent.enter:
+        debugPrint('Entered geofence area');
         // Auto check-in when entering the geofence
         if (currentState.status == AttendanceStatus.notCheckedIn) {
+          debugPrint('Attempting auto check-in...');
           await attendanceService.autoCheckIn();
+          debugPrint('Auto check-in completed');
+        } else {
+          debugPrint('Skipping auto check-in: Already checked in or in break');
         }
         break;
         
       case GeofenceEvent.exit:
+        debugPrint('Exited geofence area');
         // Auto check-out when exiting the geofence
         if (currentState.status == AttendanceStatus.checkedIn) {
+          debugPrint('Attempting auto check-out...');
           await attendanceService.autoCheckOut();
+          debugPrint('Auto check-out completed');
+        } else {
+          debugPrint('Skipping auto check-out: Not checked in or already on break');
         }
         break;
         
       case GeofenceEvent.dwell:
-        // Optional: Handle dwell events if needed
+        debugPrint('Dwelling in geofence area');
         break;
     }
     
     // Log the event
-    await storageService.saveGeofenceEvent(
-      '${params.event.toString().split('.').last} at ${DateFormat('HH:mm:ss').format(now)}',
-    );
-  } catch (e) {
+    final eventLog = '${params.event.toString().split('.').last} at ${DateFormat('HH:mm:ss').format(now)}';
+    debugPrint('Saving event: $eventLog');
+    await storageService.saveGeofenceEvent(eventLog);
+    
+  } catch (e, stackTrace) {
     // Log any errors that occur during geofence handling
     debugPrint('Error in geofenceTriggered: $e');
+    debugPrint('Stack trace: $stackTrace');
   }
 }

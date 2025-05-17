@@ -154,9 +154,9 @@ class _GeofenceConfigCardState extends State<GeofenceConfigCard> {
                     icon: const Icon(Icons.play_circle_outline),
                     label: const Text('Start Geofencing'),
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.disabled)) {
+                      backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                        (Set<WidgetState> states) {
+                          if (states.contains(WidgetState.disabled)) {
                             return Colors.grey;
                           }
                           return Colors.green;
@@ -172,9 +172,9 @@ class _GeofenceConfigCardState extends State<GeofenceConfigCard> {
                     icon: const Icon(Icons.stop_circle_outlined),
                     label: const Text('Stop Geofencing'),
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                        (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.disabled)) {
+                      backgroundColor: WidgetStateProperty.resolveWith<Color>(
+                        (Set<WidgetState> states) {
+                          if (states.contains(WidgetState.disabled)) {
                             return Colors.grey;
                           }
                           return Colors.red;

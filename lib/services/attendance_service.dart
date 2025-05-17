@@ -91,12 +91,15 @@ class AttendanceService {
   // Handle check-in/check-out
   // Auto check-in when entering geofence
   Future<AttendanceState> autoCheckIn() async {
+    debugPrint('Starting autoCheckIn...');
     final now = DateTime.now();
     final checkInEvent = AttendanceEvent(
       timestamp: now,
       type: EventType.checkIn,
       isAuto: true,
     );
+    
+    debugPrint('Created checkInEvent: ${checkInEvent.toJson()}');
     
     // Save event
     await _storageService.saveAttendanceEvent(checkInEvent);
