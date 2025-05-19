@@ -9,12 +9,12 @@ class GeofenceConfigCard extends StatefulWidget {
   final VoidCallback onStopGeofence;
 
   const GeofenceConfigCard({
-    Key? key,
+    super.key,
     required this.currentLocation,
     required this.isGeofenceActive,
     required this.onStartGeofence,
     required this.onStopGeofence,
-  }) : super(key: key);
+  });
 
   @override
   State<GeofenceConfigCard> createState() => _GeofenceConfigCardState();

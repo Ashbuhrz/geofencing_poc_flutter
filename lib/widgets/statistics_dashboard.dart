@@ -344,7 +344,7 @@ class StatisticsDashboard extends StatelessWidget {
             final breakDuration = event.timestamp.difference(breakStartTime);
             if (checkInTime != null) {
               // Adjust check-in time to account for break
-              checkInTime = checkInTime!.add(breakDuration);
+              checkInTime = checkInTime.add(breakDuration);
             }
             breakStartTime = null;
           }

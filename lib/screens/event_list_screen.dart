@@ -142,7 +142,7 @@ class _EventListScreenState extends State<EventListScreen> {
                 style: AppTextStyles.h3,
               ),
             ),
-            ...dateEvents.map((event) => _buildEventItem(event)).toList(),
+            ...dateEvents.map((event) => _buildEventItem(event)),
             if (index < sortedDates.length - 1)
               Divider(height: 32, thickness: 1, color: AppColors.lightGrey),
           ],

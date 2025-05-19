@@ -6,10 +6,10 @@ class DateTimeCard extends StatelessWidget {
   final String currentDate;
 
   const DateTimeCard({
-    Key? key,
+    super.key,
     required this.currentTime,
     required this.currentDate,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

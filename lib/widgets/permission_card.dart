@@ -6,11 +6,11 @@ class PermissionCard extends StatelessWidget {
   final VoidCallback onRequest;
 
   const PermissionCard({
-    Key? key,
+    super.key,
     required this.name,
     required this.status,
     required this.onRequest,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

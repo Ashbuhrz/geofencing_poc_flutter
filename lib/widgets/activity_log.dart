@@ -5,10 +5,10 @@ class ActivityLogWidget extends StatelessWidget {
   final VoidCallback onViewFullHistory;
 
   const ActivityLogWidget({
-    Key? key,
+    super.key,
     required this.activityLog,
     required this.onViewFullHistory,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

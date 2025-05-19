@@ -9,11 +9,11 @@ class StatusCard extends StatelessWidget {
   final VoidCallback onBreakPressed;
 
   const StatusCard({
-    Key? key,
+    super.key,
     required this.attendanceState,
     required this.onCheckInPressed,
     required this.onBreakPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -8,11 +8,11 @@ class LocationCard extends StatelessWidget {
   final VoidCallback onUpdateLocation;
 
   const LocationCard({
-    Key? key,
+    super.key,
     required this.currentLocation,
     required this.isGeofenceActive,
     required this.onUpdateLocation,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
