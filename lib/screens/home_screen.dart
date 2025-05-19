@@ -15,11 +15,15 @@ class _HomeScreenState extends State<HomeScreen> {
   String locationAccess = "Denied";
   String backgroundLocationAccess = "Denied";
   String backgroundRefresh = "Denied";
+  TextEditingController latController = TextEditingController();
+  TextEditingController lngController = TextEditingController();
+  TextEditingController radiusController = TextEditingController();
 
   String lat = "0.0";
   String lng = "0.0";
   String radius = "0";
   int activeServiceCount = 0;
+  bool isGeoFenceActive = false;
   Position currentLocation = Position(
     latitude: 0,
     longitude: 0,
@@ -49,10 +53,13 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundLocationAccess = permissions[1];
       backgroundRefresh = permissions[2];
       activeServiceCount = activeCount;
+      isGeoFenceActive = activeCount == 1;
     });
     Position cuLocation = await determinePosition();
     setState(() {
       currentLocation = cuLocation;
+      latController.text = cuLocation.latitude.toString();
+      lngController.text = cuLocation.longitude.toString();
     });
   }
 
@@ -100,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 16),
             Row(
               children: [
-                ElevatedButton(onPressed: onInIt, child: Text('Refresh')),
+                // ElevatedButton(onPressed: onInIt, child: Text('Refresh')),
                 const SizedBox(width: 16),
                 ElevatedButton(
                   onPressed: () {
@@ -119,6 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Expanded(
                   child: TextField(
+                    controller: latController,
                     onChanged: (value) {
                       setState(() {
                         lat = value;
@@ -128,12 +136,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: 'Enter Latitude',
+                      label: Text('Latitude'),
                     ),
                   ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: TextField(
+                    controller: lngController,
                     onChanged: (value) {
                       setState(() {
                         lng = value;
@@ -143,6 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: 'Enter Longitude',
+                      label: Text('Longitude'),
                     ),
                   ),
                 ),
@@ -158,49 +169,96 @@ class _HomeScreenState extends State<HomeScreen> {
                   });
                 },
                 keyboardType: TextInputType.number,
+                controller: radiusController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   hintText: 'Radius',
+                  label: Text('Radius'),
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                if (lat != "" && lng != "" && radius != "") {
-                  startGeoFenceee(
-                    double.parse(lat),
-                    double.parse(lng),
-                    double.parse(radius),
-                  );
-                } else {
-                  showDialog<String>(
-                    context: context,
-                    builder:
-                        (BuildContext context) => AlertDialog(
-                          title: const Text('Error'),
-                          content: const Text('Need lat,long and radius'),
-                          actions: <Widget>[
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'Cancel'),
-                              child: const Text('Ok'),
-                            ),
-                          ],
-                        ),
-                  );
-                }
-              },
-              child: Text('Initiate Geofene'),
             ),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: removeGeoFens,
-                  child: Text('Stop Geofene'),
-                ),
+                const Text('BG Geofence'),
                 const SizedBox(width: 16),
+                Switch(
+                  // This bool value toggles the switch.
+                  value: isGeoFenceActive,
+                  activeColor: Colors.green,
+                  onChanged: (bool value) {
+                    // This is called when the user toggles the switch.
+                    setState(() {
+                      isGeoFenceActive = value;
+                    });
+                    if (value) {
+                      if (lat != "" && lng != "" && radius != "") {
+                        startGeoFenceee(
+                          double.parse(lat),
+                          double.parse(lng),
+                          double.parse(radius),
+                        );
+                      } else {
+                        showDialog<String>(
+                          context: context,
+                          builder:
+                              (BuildContext context) => AlertDialog(
+                                title: const Text('Error'),
+                                content: const Text('Need lat,long and radius'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed:
+                                        () => Navigator.pop(context, 'Cancel'),
+                                    child: const Text('Ok'),
+                                  ),
+                                ],
+                              ),
+                        );
+                      }
+                    } else {
+                      removeGeoFens();
+                    }
+                  },
+                ),
+              ],
+            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     if (lat != "" && lng != "" && radius != "") {
+            //       startGeoFenceee(
+            //         double.parse(lat),
+            //         double.parse(lng),
+            //         double.parse(radius),
+            //       );
+            //     } else {
+            //       showDialog<String>(
+            //         context: context,
+            //         builder:
+            //             (BuildContext context) => AlertDialog(
+            //               title: const Text('Error'),
+            //               content: const Text('Need lat,long and radius'),
+            //               actions: <Widget>[
+            //                 TextButton(
+            //                   onPressed: () => Navigator.pop(context, 'Cancel'),
+            //                   child: const Text('Ok'),
+            //                 ),
+            //               ],
+            //             ),
+            //       );
+            //     }
+            //   },
+            //   child: Text('Initiate Geofene'),
+            // ),
+            // const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // ElevatedButton(
+                //   onPressed: removeGeoFens,
+                //   child: Text('Stop Geofene'),
+                // ),
+                // const SizedBox(width: 16),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).push(

@@ -23,7 +23,7 @@ void startGeoFenceee(double lat, double lng, double radius) async {
     id: 'zone1',
     location: Location(latitude: lat, longitude: lng), // Times Square
     radiusMeters: radius,
-    triggers: {GeofenceEvent.enter, GeofenceEvent.exit, GeofenceEvent.dwell},
+    triggers: {GeofenceEvent.enter, GeofenceEvent.exit},
     iosSettings: IosGeofenceSettings(initialTrigger: true),
     androidSettings: AndroidGeofenceSettings(
       initialTriggers: {GeofenceEvent.enter},
