@@ -60,6 +60,10 @@ class _HomeScreenState extends State<HomeScreen> {
       currentLocation = cuLocation;
       latController.text = cuLocation.latitude.toString();
       lngController.text = cuLocation.longitude.toString();
+      radiusController.text = "100";
+      lat = cuLocation.latitude.toString();
+      lng = cuLocation.longitude.toString();
+      radius = "100";
     });
   }
 
@@ -255,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // ElevatedButton(
-                //   onPressed: removeGeoFens,
+                //   onPressed: openAppSettings,
                 //   child: Text('Stop Geofene'),
                 // ),
                 // const SizedBox(width: 16),

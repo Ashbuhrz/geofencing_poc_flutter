@@ -13,7 +13,9 @@ Future<void> geofenceTriggered(GeofenceCallbackParams params) async {
     date: DateTime.now(),
     format: "dd/MM/yyyy h:mm a",
   );
-  await saveEventToSharedSpace('Event: ${params.event} At ${dateFormated}');
+  await saveEventToSharedSpace(
+    '${params.event.index == 1 ? "Enter" : "Exit"} @ ${dateFormated}',
+  );
   print('Event: ${params.event} At ${dateFormated}');
 }
 

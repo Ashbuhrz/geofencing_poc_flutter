@@ -1,5 +1,6 @@
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:app_settings/app_settings.dart';
 
 Future<List<String>> checkAllPermissions() async {
   bool locationGranted = await Permission.location.isGranted;
@@ -27,10 +28,11 @@ Future<void> requestBackgroundRefreshPermissions() async {
 }
 
 void openAppSettings() async {
-  final Uri appSettingsUri = Uri.parse('app-settings:');
-  if (await canLaunchUrl(appSettingsUri)) {
-    await launchUrl(appSettingsUri);
-  } else {
-    print('Could not open app settings');
-  }
+  // final Uri appSettingsUri = Uri.parse('app-settings:');
+  // if (await canLaunchUrl(appSettingsUri)) {
+  //   await launchUrl(appSettingsUri);
+  // } else {
+  //   print('Could not open app settings');
+  // }
+  AppSettings.openAppSettings();
 }
