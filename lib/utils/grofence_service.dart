@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:geofencingpoc/utils/local_notification.dart';
 import 'package:geofencingpoc/utils/sharePreference.dart';
 import 'package:intl/intl.dart';
 import 'package:native_geofence/native_geofence.dart';
@@ -9,31 +12,53 @@ Future<void> initializeServiceGEO() async {
 
 @pragma('vm:entry-point')
 Future<void> geofenceTriggered(GeofenceCallbackParams params) async {
+  
   String dateFormated = getDate(
     date: DateTime.now(),
     format: "dd/MM/yyyy h:mm a",
   );
   await saveEventToSharedSpace('Event: ${params.event} At ${dateFormated}');
   print('Event: ${params.event} At ${dateFormated}');
+  NotificationService.showNotification(
+    id: 0,
+    title: 'Attendance Logged',
+    body: 'You have entered the attendance zone.',
+  );
 }
+
+Future<void> geofenceTriggered1(GeofenceCallbackParams pa)async {
+  print('Geofence triggered! Event: , Geofence ID: ${pa.event.index}');
+  if (pa.event == GeofenceEvent.enter) {
+    print('Entered geofence ');
+    // Your code for entering event here
+  } else if (pa.event == GeofenceEvent.exit) {
+    print('Exited geofence ${pa.event.index}');
+    // Your code for exiting event here
+  }
+}
+
 
 void startGeoFenceee(double lat, double lng, double radius) async {
   await removeGeoFens();
   final zone1 = Geofence(
     id: 'zone1',
-    location: Location(latitude: lat, longitude: lng), // Times Square
-    radiusMeters: radius,
+    location: Location(
+      latitude: 11.8891717,
+      longitude: 75.4705483,
+    ), // Times Square
+    radiusMeters: 100,
     triggers: {GeofenceEvent.enter, GeofenceEvent.exit},
     iosSettings: IosGeofenceSettings(initialTrigger: true),
     androidSettings: AndroidGeofenceSettings(
       initialTriggers: {GeofenceEvent.enter},
       expiration: const Duration(days: 7),
       loiteringDelay: const Duration(minutes: 1),
-      notificationResponsiveness: const Duration(minutes: 5),
+      //notificationResponsiveness: const Duration(seconds: 10),
     ),
   );
-  await NativeGeofenceManager.instance.createGeofence(zone1, geofenceTriggered);
+  await NativeGeofenceManager.instance.createGeofence(zone1, geofenceTriggered1);
   NativeGeofenceBackgroundManager.instance.demoteToBackground();
+  print('Zone setted');
   return;
 }
 
